@@ -5,6 +5,7 @@ import { setScore } from '../../../api/scoresApi';
 import { useAuth } from '../../auth/AuthContext';
 import { GAME_OVER_REASONS } from '../engine/constants';
 import { GameEngine } from '../engine/GameEngine';
+import { ENTITY_TYPES } from '../engine/constants';
 
 const initialHud = {
   status: 'idle',
@@ -17,7 +18,7 @@ const initialHud = {
   timeLeftMs: 2 * 60 * 1000,
 };
 
-export function useGame(canvasRef) {
+export function useGame(canvasRef, images) {
   const { auth } = useAuth();
   const navigate = useNavigate();
   const engineRef = useRef(null);
@@ -29,6 +30,15 @@ export function useGame(canvasRef) {
     submitted: false,
     error: '',
   });
+
+  const areImagesLoaded = useMemo(() => {
+    const requiredTypes = [ENTITY_TYPES.RED, ENTITY_TYPES.GREEN, ENTITY_TYPES.MIXED];
+    
+    return requiredTypes.every(type => {
+      const img = images[type];
+      return img && img.complete && img.naturalWidth > 0;
+    });
+  }, [images]);
 
   const onGameOver = useCallback(
     async ({ score, durationMs }) => {
@@ -63,37 +73,56 @@ export function useGame(canvasRef) {
   );
 
   const boot = useCallback(async () => {
-    if (!auth?.token || !canvasRef.current) return;
+    console.log("Boot called, areImagesLoaded:", areImagesLoaded);
+    console.log("Images in boot:", images);
+    
+    if (!areImagesLoaded) {
+      console.log("Images not loaded yet");
+      return;
+    }
+
+    if (!auth?.token || !canvasRef.current) {
+      console.log("No auth or canvas");
+      return;
+    }
 
     try {
       const { sessionId: nextSessionId } = await startGame(auth.token);
       sessionIdRef.current = nextSessionId;
       setSessionId(nextSessionId);
-
+      
+      console.log("Creating GameEngine with images:", images);
       const engine = new GameEngine({
         canvas: canvasRef.current,
         onStateChange: setHud,
         onGameOver,
+        images
       });
 
       engineRef.current = engine;
+      console.log("PreStart");
       engine.start();
     } catch (error) {
+      console.log("Error", error);
       setSubmitState({
         isSubmitting: false,
         submitted: true,
         error: error.message || 'Не удалось начать игру',
       });
     }
-  }, [auth?.token, canvasRef, onGameOver]);
+  }, [auth?.token, canvasRef, onGameOver, areImagesLoaded, images]);
 
   useEffect(() => {
-    boot();
+    if (areImagesLoaded) {
+      boot();
+    }
+  }, [areImagesLoaded, boot]);
 
+  useEffect(() => {
     return () => {
       engineRef.current?.destroy();
     };
-  }, [boot]);
+  }, []);
 
   const pressLane = useCallback((laneIndex) => {
     engineRef.current?.pressLane(laneIndex);
@@ -128,5 +157,6 @@ export function useGame(canvasRef) {
     goHome,
     result,
     submitState,
+    imagesLoaded: areImagesLoaded,
   };
 }

@@ -55,7 +55,7 @@ export default function ResultModal({
   onRetry,
   onHome,
 }) {
-  const imageSrc = isSuccess ? '/images/success.svg' : '/images/fail.svg';
+  const imageSrc = isSuccess ? '/images/success.jpg' : '/images/fail.jpg';
 
   return (
     <Modal

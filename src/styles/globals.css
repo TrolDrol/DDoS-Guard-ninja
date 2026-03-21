@@ -127,6 +127,33 @@ input::placeholder {
   overflow: hidden;
 }
 
+.page-auth {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: var(--background);
+}
+
+.page-auth .card {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.page-auth h1,
+.page-auth p {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.page-auth .card .btn {
+  margin-top: 24px;
+}
+
 .game-row {
   min-height: 0;
 }
@@ -183,6 +210,12 @@ input::placeholder {
   padding: 16px;
 }
 
+.card {
+  width: 100%;
+  padding: 32px;
+  text-align: center;
+}
+
 .hero-card {
   display: grid;
   gap: 20px;
@@ -234,9 +267,8 @@ input::placeholder {
 .hero-image {
   width: 100%;
   min-height: 240px;
-  border-radius: 24px;
   object-fit: cover;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  margin: 10px;
 }
 
 .section-header {
@@ -325,6 +357,16 @@ input::placeholder {
 .my-rank-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.my-rank-card {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 12px;
 }
 
@@ -432,12 +474,14 @@ input::placeholder {
 
 .hud-card {
   border-radius: var(--radius-lg);
-  padding: 12px 14px;
+  padding: 2px 4px;
   min-width: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .hud-card strong {
@@ -916,6 +960,45 @@ input::placeholder {
   color: #a5f3fc;
 }
 
+/* Разделитель "или" */
+.divider {
+  text-align: center;
+  margin: 15px 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background: transparent;
+  padding: 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Кнопка Telegram */
+.btn-telegram {
+  background: linear-gradient(135deg, #0088cc 0%, #006699 100%) !important;
+  margin-top: 10px;
+  width: 100%;
+}
+
 
 @media (max-width: 720px) {
   .tutorial-fab {
@@ -1030,5 +1113,18 @@ input::placeholder {
 
   .lane-key__hint {
     font-size: 10px;
+  }
+
+  .divider {
+    margin: 12px 0;
+  }
+
+  .divider span {
+    font-size: 12px;
+  }
+
+  .btn-telegram {
+    min-height: 48px;
+    font-size: 14px;
   }
 }

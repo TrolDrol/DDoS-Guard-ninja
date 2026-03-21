@@ -6,14 +6,48 @@ export default function RegistrationModal({ open }) {
   const { values, errors, isSubmitting, serverError, setField, submit } =
     useRegistration();
 
+  const openTelegramBot = () => {
+    window.open("https://t.me/regist_form_bot", "_blank");
+  };
+
   return (
     <Modal
       open={open}
       title="Регистрация игрока"
       footer={
-        <Button disabled={isSubmitting} onClick={submit}>
-          {isSubmitting ? 'Сохраняем...' : 'Продолжить'}
-        </Button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            gap: "12px",
+          }}
+        >
+          <Button
+            disabled={isSubmitting}
+            onClick={submit}
+            style={{ width: "100%", maxWidth: "280px" }}
+          >
+            {isSubmitting ? "Сохраняем..." : "Продолжить"}
+          </Button>
+
+          <div
+            className="divider"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            <span>или</span>
+          </div>
+
+          <Button
+            onClick={openTelegramBot}
+            className="btn-telegram"
+            style={{ width: "100%", maxWidth: "280px" }}
+          >
+            📱 Войти через Telegram
+          </Button>
+        </div>
       }
     >
       <div className="form-grid">

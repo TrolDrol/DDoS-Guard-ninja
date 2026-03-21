@@ -1,5 +1,5 @@
 import { drawBoard } from './drawBoard';
-import { drawEntities } from './drawEntities';
+import { drawEntitiesImage } from './drawEntities';
 import { drawEffects } from './drawEffects';
 
 export class CanvasRenderer {
@@ -7,9 +7,9 @@ export class CanvasRenderer {
     this.ctx = ctx;
   }
 
-  render(state, now) {
+  render(state, now, images) {
     drawBoard(this.ctx, state);
-    drawEntities(this.ctx, state.entities);
+    drawEntitiesImage(this.ctx, state.entities, images);
     drawEffects(this.ctx, state, now);
   }
 }

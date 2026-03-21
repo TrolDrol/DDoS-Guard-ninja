@@ -26,14 +26,14 @@ export default function HomePage() {
             телефоне можно играть касанием по полю или по клавишам пианино.
           </p>
         </div>
-        <img src="/images/hero.svg" alt="Главная картинка игры" className="hero-image" />
+          <img src="/images/hero.svg" alt="Главная картинка игры" className="hero-image" />
       </section>
 
-      {isLoading ? <Loader text="Загружаем таблицу лидеров..." /> : null}
+      {/* {isLoading ? <Loader text="Загружаем таблицу лидеров..." /> : null} */}
       {error ? <ErrorBlock message={error} /> : null}
       {!isLoading && !error ? (
         <>
-          <LeaderboardList top={data.top} me={data.me} />
+          {/* <LeaderboardList top={data.top} me={data.me} />
 
           {data.me?.rank > 100 ? (
             <section className="card jump-card glass-panel">
@@ -45,7 +45,7 @@ export default function HomePage() {
                 Показать мою позицию
               </Button>
             </section>
-          ) : null}
+          ) : null} */}
 
           <MyRankCard me={data.me} />
         </>

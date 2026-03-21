@@ -3,10 +3,10 @@ export default function MyRankCard({ me }) {
 
   return (
     <section id="my-rank" className="card my-rank-card">
-      <div className="section-header">
-        <h2>Моя позиция</h2>
-      </div>
-      <div className="my-rank-grid">
+    <div className="section-header">
+      <h2>Мой рекорд: {me.score}</h2>
+    </div>
+      {/* <div className="my-rank-grid">
         <div>
           <div className="muted-label">Игрок</div>
           <div className="strong-value">{me.name}</div>
@@ -19,7 +19,7 @@ export default function MyRankCard({ me }) {
           <div className="muted-label">Счёт</div>
           <div className="strong-value">{me.score}</div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }

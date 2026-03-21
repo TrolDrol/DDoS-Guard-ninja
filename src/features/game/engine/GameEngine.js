@@ -1,4 +1,4 @@
-import { GAME_OVER_REASONS, GAME_STATUS } from './constants';
+import { ENTITY_TYPES, GAME_OVER_REASONS, GAME_STATUS } from './constants';
 import { GAME_CONFIG } from './config';
 import { createInitialGameState } from './stateFactory';
 import { CanvasRenderer } from './renderer/CanvasRenderer';
@@ -9,7 +9,7 @@ import { updateResolveMissSystem } from './systems/ResolveMissSystem';
 import { updateEndGameSystem } from './systems/EndGameSystem';
 
 export class GameEngine {
-  constructor({ canvas, onStateChange, onGameOver }) {
+  constructor({ canvas, onStateChange, onGameOver, images }) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.renderer = new CanvasRenderer(this.ctx);
@@ -20,6 +20,7 @@ export class GameEngine {
     this.lastFrameAt = 0;
     this.spawnAccumulator = 0;
     this.lastHudSignature = '';
+    this.images = images;
   }
 
   applyCanvasMetrics() {
@@ -35,6 +36,8 @@ export class GameEngine {
     this.state.startedAt = performance.now();
     this.lastFrameAt = performance.now();
     this.emit(true);
+    console.log("Game start");
+    console.log("Images Start:", this.images);
     this.loop();
   }
 
@@ -124,7 +127,7 @@ export class GameEngine {
       );
     }
 
-    this.renderer.render(this.state, now);
+    this.renderer.render(this.state, now, this.images);
     this.emit();
 
     if (this.state.status === GAME_STATUS.GAME_OVER) {

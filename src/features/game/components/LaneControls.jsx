@@ -38,10 +38,7 @@ export default function LaneControls({ onLanePress, disabled, activeLane = null 
             onPointerCancel={() => setPressedLane(null)}
             onPointerLeave={() => setPressedLane((current) => (current === lane ? null : current))}
           >
-            <span className="lane-key__index">Дорожка {lane + 1}</span>
             <span className="lane-key__label lane-key__label--desktop">{LANE_LABELS[lane]}</span>
-            <span className="lane-key__label lane-key__label--mobile">●</span>
-            <span className="lane-key__hint">Клик</span>
           </button>
         );
       })}

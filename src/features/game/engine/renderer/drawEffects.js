@@ -1,5 +1,12 @@
 import { GAME_CONFIG } from '../config';
 
+const shieldImage = new Image();
+shieldImage.src = 'images/shield.svg';
+let imageLoaded = false;
+
+shieldImage.onload = () => {
+  imageLoaded = true;
+};
 export function drawEffects(ctx, state, now) {
   const laneWidth = GAME_CONFIG.width / GAME_CONFIG.laneCount;
   const shieldCenterY = GAME_CONFIG.height - GAME_CONFIG.shieldLineOffsetFromBottom;
@@ -33,9 +40,21 @@ export function drawEffects(ctx, state, now) {
       GAME_CONFIG.shieldZoneHeight - 4,
     );
 
-    ctx.fillStyle = 'rgba(239, 246, 255, 0.95)';
-    ctx.font = '700 14px Inter, Arial';
-    ctx.fillText('ЩИТ', x + laneWidth / 2 - 19, shieldCenterY + 5);
+    if (imageLoaded && shieldImage.complete) {
+      const imgWidth = 60;
+      const imgHeight = 65;
+      ctx.drawImage(
+        shieldImage,
+        x + laneWidth / 2 - imgWidth / 2,
+        shieldCenterY - imgHeight / 2,
+        imgWidth,
+        imgHeight
+      );
+    } else {
+      ctx.fillStyle = 'rgba(239, 246, 255, 0.95)';
+      ctx.font = '700 14px Inter, Arial';
+      ctx.fillText('ЩИТ', x + laneWidth / 2 - 19, shieldCenterY + 5);
+    }
   });
 
   state.pulseEffects.forEach((effect) => {

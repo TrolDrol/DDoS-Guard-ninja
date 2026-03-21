@@ -41,8 +41,8 @@ function drawMixedBall(ctx, x, y, radius) {
     x,
     y,
     radius,
-    outerColor: '#ff4d6d',
-    innerColor: '#1dd75f',
+    outerColor: '#1dd75f',
+    innerColor: '#ff4d6d',
     ringColor: 'rgba(255,255,255,0.34)',
   });
 
@@ -85,3 +85,144 @@ export function drawEntities(ctx, entities) {
     drawMixedBall(ctx, x, entity.y, entity.radius);
   }
 }
+
+function drawImageOrb(ctx, img, x, y, radius) {
+  if (!img || !img.complete) return;
+
+  const size = radius * 2;
+  ctx.save();
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = 'rgba(0,0,0,0.3)';
+  ctx.drawImage(
+    img,
+    x - radius,
+    y - radius,
+    size,
+    size
+  );
+  ctx.restore();
+}
+
+export function drawEntitiesImage(ctx, entities, images) {
+  for (const entity of entities) {
+    const x = laneCenter(entity.lane);
+
+    if (images !== undefined && images[entity.type] && images[entity.type].complete) {
+      drawImageOrb(ctx, images[entity.type], x, entity.y, entity.radius);
+      continue;
+    }
+    else if (entity.type === ENTITY_TYPES.RED) {
+      drawOrb(ctx, {
+        x,
+        y: entity.y,
+        radius: entity.radius,
+        outerColor: '#ef4444',
+        innerColor: '#fda4af',
+      });
+      continue;
+    }
+    else if (entity.type === ENTITY_TYPES.GREEN) {
+      drawOrb(ctx, {
+        x, y: entity.y,
+        radius: entity.radius,
+        outerColor: '#2ef245',
+        innerColor: '#97eaa9',
+      });
+      continue;
+    }
+
+    drawMixedBall(ctx, x, entity.y, entity.radius);
+  }
+}
+
+
+// import { ENTITY_TYPES } from '../constants';
+// import { GAME_CONFIG } from '../config';
+
+// const images = {};
+// let imagesLoaded = false;
+// let loadPromise = null;
+
+// export const initEntityImages = () => {
+//   if (loadPromise) return loadPromise;
+  
+//   const imagePromises = [];
+  
+//   Object.values(ENTITY_TYPES).forEach(type => {
+//     const img = new Image();
+//     const promise = new Promise((resolve) => {
+//       img.onload = () => {
+//         console.log(`Loaded: ${type}`);
+//         resolve({ type, img });
+//       };
+//       img.onerror = () => {
+//         console.error(`Failed to load: images/${type}.jpg`);
+//         resolve({ type, img: null });
+//       };
+//     });
+//     img.src = `images/${type}.jpg`;
+//     imagePromises.push(promise);
+//     images[type] = img;
+//   });
+  
+//   loadPromise = Promise.all(imagePromises).then(() => {
+//     imagesLoaded = true;
+//     return images;
+//   });
+  
+//   return loadPromise;
+// };
+
+// export const getEntityImage = (type) => {
+//   return images[type];
+// };
+
+// export const areImagesLoaded = () => imagesLoaded;
+
+// function laneCenter(laneIndex) {
+//   const laneWidth = GAME_CONFIG.width / GAME_CONFIG.laneCount;
+//   return laneWidth * laneIndex + laneWidth / 2;
+// }
+
+// function drawImageOrb(ctx, img, x, y, radius) {
+//   if (!img || !img.complete) return;
+
+//   const size = radius * 2;
+//   ctx.save();
+//   ctx.shadowBlur = 12;
+//   ctx.shadowColor = 'rgba(0,0,0,0.3)';
+//   ctx.drawImage(
+//     img,
+//     x - radius,
+//     y - radius,
+//     size,
+//     size
+//   );
+//   ctx.restore();
+// }
+
+// export function drawEntities(ctx, entities) {
+//   const imagesLoaded = areImagesLoaded();
+  
+//   for (const entity of entities) {
+//     const x = laneCenter(entity.lane);
+//     const img = getEntityImage(entity.type);
+    
+//     if (imagesLoaded && img && img.complete) {
+//       const size = entity.radius * 2;
+//       ctx.drawImage(
+//         img,
+//         x - entity.radius,
+//         entity.y - entity.radius,
+//         size,
+//         size
+//       );
+//     } else {
+//       ctx.fillStyle = entity.type === ENTITY_TYPES.GREEN ? '#22c55e' : 
+//                       entity.type === ENTITY_TYPES.RED ? '#ef4444' : '#ff4d6d';
+//       ctx.beginPath();
+//       ctx.arc(x, entity.y, entity.radius, 0, Math.PI * 2);
+//       ctx.fill();
+//     }
+//   }
+// }
