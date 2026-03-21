@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c4a6e"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g)"/>
+  <circle cx="170" cy="160" r="70" fill="rgba(255,255,255,0.18)"/>
+  <circle cx="1010" cy="450" r="120" fill="rgba(255,255,255,0.08)"/>
+  <text x="600" y="250" font-size="72" text-anchor="middle" fill="#fff" font-family="Arial" font-weight="700">Щит активен</text>
+  <text x="600" y="330" font-size="30" text-anchor="middle" fill="rgba(255,255,255,0.92)" font-family="Arial">Сейчас все сущности блокируются</text>
+</svg>

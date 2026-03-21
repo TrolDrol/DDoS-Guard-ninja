@@ -1,0 +1,22 @@
+export const GAME_CONFIG = {
+  width: 420,
+  height: 720,
+  laneCount: 4,
+  startLives: 3,
+  entityRadius: 24,
+  shieldDurationMs: 220,
+  shieldZoneHeight: 88,
+  shieldZoneInsetX: 6,
+  baseSpawnIntervalMs: 720,
+  minSpawnIntervalMs: 360,
+  initialSpeedPxPerSec: 180,
+  speedGainPerMinute: 28,
+  shieldLineOffsetFromBottom: 130,
+  bottomDangerLivesThreshold: 1,
+  maxGameDurationMs: 2 * 60 * 1000,
+  spawnWeights: {
+    green: 0.48,
+    red: 0.37,
+    mixed: 0.15,
+  },
+};
