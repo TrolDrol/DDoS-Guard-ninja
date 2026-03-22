@@ -6,6 +6,7 @@ import { useAuth } from '../../auth/AuthContext';
 import { GAME_OVER_REASONS } from '../engine/constants';
 import { GameEngine } from '../engine/GameEngine';
 import { ENTITY_TYPES } from '../engine/constants';
+import { setIsTutorialGlobal } from '../../../app/App';
 
 const initialHud = {
   status: 'idle',
@@ -43,8 +44,7 @@ export function useGame(canvasRef, images) {
   const onGameOver = useCallback(
     async ({ score, durationMs }) => {
       const currentSessionId = sessionIdRef.current;
-
-      if (!auth?.token || !currentSessionId) {
+      if (!auth?.user_id || false) {
         setSubmitState({
           isSubmitting: false,
           submitted: true,
@@ -55,11 +55,8 @@ export function useGame(canvasRef, images) {
 
       try {
         setSubmitState({ isSubmitting: true, submitted: false, error: '' });
-        await setScore(auth.token, {
-          sessionId: currentSessionId,
-          score,
-          durationMs,
-        });
+        await setScore(auth.user_id, 
+          score);
         setSubmitState({ isSubmitting: false, submitted: true, error: '' });
       } catch (error) {
         setSubmitState({
@@ -69,29 +66,24 @@ export function useGame(canvasRef, images) {
         });
       }
     },
-    [auth?.token],
+    [auth?.user_id],
   );
 
   const boot = useCallback(async () => {
-    console.log("Boot called, areImagesLoaded:", areImagesLoaded);
-    console.log("Images in boot:", images);
     
     if (!areImagesLoaded) {
-      console.log("Images not loaded yet");
       return;
     }
 
-    if (!auth?.token || !canvasRef.current) {
-      console.log("No auth or canvas");
+    if (!auth?.user_id || !canvasRef.current) {
       return;
     }
 
     try {
-      const { sessionId: nextSessionId } = await startGame(auth.token);
+      const { sessionId: nextSessionId } = await startGame(auth.user_id);
       sessionIdRef.current = nextSessionId;
       setSessionId(nextSessionId);
       
-      console.log("Creating GameEngine with images:", images);
       const engine = new GameEngine({
         canvas: canvasRef.current,
         onStateChange: setHud,
@@ -100,17 +92,15 @@ export function useGame(canvasRef, images) {
       });
 
       engineRef.current = engine;
-      console.log("PreStart");
       engine.start();
     } catch (error) {
-      console.log("Error", error);
       setSubmitState({
         isSubmitting: false,
         submitted: true,
         error: error.message || 'Не удалось начать игру',
       });
     }
-  }, [auth?.token, canvasRef, onGameOver, areImagesLoaded, images]);
+  }, [auth?.user_id, canvasRef, onGameOver, areImagesLoaded, images]);
 
   useEffect(() => {
     if (areImagesLoaded) {
@@ -134,6 +124,7 @@ export function useGame(canvasRef, images) {
     setHud(initialHud);
     setSessionId('');
     setSubmitState({ isSubmitting: false, submitted: false, error: '' });
+    setIsTutorialGlobal(false);
     boot();
   }, [boot]);
 

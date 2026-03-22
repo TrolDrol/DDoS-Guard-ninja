@@ -1,7 +1,7 @@
 export function validateRegistration(values) {
   const errors = {};
 
-  const name = values.name?.trim() ?? '';
+  const name = values.full_name?.trim() ?? '';
   const phone = values.phone?.trim() ?? '';
 
   if (name.length < 2) {
@@ -16,7 +16,7 @@ export function validateRegistration(values) {
     errors.phone = 'Введите корректный номер телефона';
   }
 
-  if (!values.consent) {
+  if (!values.consent_given) {
     errors.consent = 'Нужно подтвердить согласие на обработку данных';
   }
 

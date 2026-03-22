@@ -1,6 +1,7 @@
 import Modal from '../../../shared/components/Modal';
 import Button from '../../../shared/components/Button';
 import { useRegistration } from '../hooks/useRegistration';
+import '../../../styles/globals.css';
 
 export default function RegistrationModal({ open }) {
   const { values, errors, isSubmitting, serverError, setField, submit } =
@@ -29,6 +30,7 @@ export default function RegistrationModal({ open }) {
             disabled={isSubmitting}
             onClick={submit}
             style={{ width: "100%", maxWidth: "280px" }}
+            className='btnRegister'
           >
             {isSubmitting ? "Сохраняем..." : "Продолжить"}
           </Button>
@@ -45,7 +47,7 @@ export default function RegistrationModal({ open }) {
             className="btn-telegram"
             style={{ width: "100%", maxWidth: "280px" }}
           >
-            📱 Войти через Telegram
+            Войти через Telegram
           </Button>
         </div>
       }
@@ -57,7 +59,7 @@ export default function RegistrationModal({ open }) {
             type="text"
             maxLength={30}
             value={values.name}
-            onChange={(event) => setField('name', event.target.value)}
+            onChange={(event) => setField('full_name', event.target.value)}
             placeholder="Введите имя"
           />
           {errors.name ? <small className="field-error">{errors.name}</small> : null}
@@ -78,7 +80,7 @@ export default function RegistrationModal({ open }) {
           <input
             type="checkbox"
             checked={values.consent}
-            onChange={(event) => setField('consent', event.target.checked)}
+            onChange={(event) => setField('consent_given', event.target.checked)}
           />
           <span>
             Я подтверждаю согласие на обработку персональных данных

@@ -70,8 +70,4 @@ export function drawBoard(ctx, state) {
   ctx.lineWidth = 2;
   ctx.strokeRect(0, shieldTopY, GAME_CONFIG.width, GAME_CONFIG.shieldZoneHeight);
   ctx.setLineDash([]);
-
-  ctx.fillStyle = 'rgba(226, 232, 240, 0.85)';
-  ctx.font = '600 13px Inter, Arial';
-  ctx.fillText('Зона щита: сущности исчезают при касании', 14, shieldTopY - 14);
 }

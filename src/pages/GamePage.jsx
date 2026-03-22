@@ -6,15 +6,13 @@ import { useAuth } from '../features/auth/AuthContext';
 import GameCanvas from '../features/game/components/GameCanvas';
 import GameHud from '../features/game/components/GameHud';
 import LaneControls from '../features/game/components/LaneControls';
-import BottomStateImage from '../features/game/components/BottomStateImage';
 import ResultModal from '../features/game/components/ResultModal';
-import { ENTITY_TYPES } from '../features/game/engine/constants';
 
-export default function GamePage({ images }) {
+export default function GamePage({ images, isTutorial }) {
   const { isAuthorized } = useAuth();
   const canvasRef = useRef(null);
 
-  const { hud, pressLane, restart, goHome, result, submitState } = useGame(canvasRef, images);
+  const { hud, pressLane, restart, goHome, result, submitState } = useGame(canvasRef, images, isTutorial);
 
   useLaneInput(pressLane);
 
@@ -23,7 +21,8 @@ export default function GamePage({ images }) {
       <main className="page page-auth">
         <section className="card">
           <h1>Нужно зарегистрироваться</h1>
-          <p>Сначала вернись на главную страницу и пройди регистрацию игрока.</p>
+          <p>Сначала вернитесь на главную страницу
+            и пройдите регистрацию игрока.</p>
           <Link to="/" className="btn">
             На главную
           </Link>
@@ -53,9 +52,6 @@ export default function GamePage({ images }) {
           activeLane={hud.activeShieldLane}
           onLanePress={pressLane}
         />
-      </div>
-      <div className="game-row game-row--bottom">
-        <BottomStateImage stateKey={hud.bottomImageKey} />
       </div>
 
       <ResultModal

@@ -1,16 +1,14 @@
 import { httpClient } from './httpClient';
 
-export function getScores(token) {
-  return httpClient('/v1/getScores', {
-    method: 'GET',
-    token,
+export function getScores(userId) {
+  return httpClient(`/api/user/${userId}`, {
+    method: 'GET'
   });
 }
 
-export function setScore(token, payload) {
-  return httpClient('/v1/setScore', {
-    method: 'POST',
-    token,
-    body: payload,
+export function setScore(userId, score) {
+  return httpClient(`/api/user/${userId}/score`, {
+    method: 'PUT',
+    body: { score },
   });
 }

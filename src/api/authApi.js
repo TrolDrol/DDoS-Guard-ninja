@@ -1,7 +1,7 @@
 import { httpClient } from './httpClient';
 
 export function authPlayer(payload) {
-  return httpClient('/v1/auth', {
+  return httpClient('/api/form/register', {
     method: 'POST',
     body: payload,
   });

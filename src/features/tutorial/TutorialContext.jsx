@@ -4,6 +4,15 @@ import { isTutorialSeen, markTutorialSeen } from './tutorialStorage';
 
 const TutorialContext = createContext(null);
 
+export const TUTORIAL_STEPS = {
+NONE: 'none',
+GREEN_ENEMY: 'green_enemy',
+RED_ENEMY: 'red_enemy',
+SHIELD: 'shield',
+MIXED_ENEMY: 'mixed_enemy',
+COMPLETE: 'complete'
+};
+
 export function TutorialProvider({ children }) {
   const { isAuthorized } = useAuth();
   const [isOpen, setIsOpen] = useState(false);

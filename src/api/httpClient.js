@@ -19,7 +19,6 @@ export async function httpClient(path, options = {}) {
     ...rest,
     headers: {
       'Content-Type': 'application/json',
-      'x-device-id': getOrCreateDeviceId(),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
@@ -30,8 +29,8 @@ export async function httpClient(path, options = {}) {
 
   if (!response.ok) {
     const message =
-      typeof payload === 'object' && payload?.message
-        ? payload.message
+      typeof payload === 'object' && payload?.error
+        ? payload.error
         : 'Ошибка запроса';
     const error = new Error(message);
     error.status = response.status;

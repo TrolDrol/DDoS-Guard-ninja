@@ -4,9 +4,9 @@ import { validateRegistration } from '../validators';
 import { useAuth } from '../AuthContext';
 
 const initialValues = {
-  name: '',
+  full_name: '',
   phone: '',
-  consent: false,
+  consent_given: false,
 };
 
 export function useRegistration() {
@@ -32,7 +32,15 @@ export function useRegistration() {
     try {
       setIsSubmitting(true);
       const response = await authPlayer(values);
-      setAuth(response);
+      setAuth(response.message === "Регистрация успешна");
+
+      if (response.user_id) {
+        localStorage.setItem('user_id', response.user_id);
+        localStorage.setItem('auth_token', response.token); // если есть токен
+      }
+      setAuth(
+        {user_id: response.user_id}
+      );
       return true;
     } catch (error) {
       setServerError(error.message || 'Не удалось зарегистрировать игрока');

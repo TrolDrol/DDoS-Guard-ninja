@@ -5,6 +5,16 @@ import TutorialButton from '../features/tutorial/components/TutorialButton';
 import TutorialModal from '../features/tutorial/components/TutorialModal';
 import { useImageLoader } from '../features/game/hooks/useImageLoader';
 
+let isTutorialGlobal = true;
+
+export function setIsTutorialGlobal(value) {
+  isTutorialGlobal = value;
+}
+
+export function getIsTutorialGlobal() {
+  return !isTutorialGlobal;
+}
+
 export default function App() {
   const { images, loading, error } = useImageLoader({
     green: '/images/green.jpg',
@@ -14,7 +24,7 @@ export default function App() {
   return (
     <>
       <TutorialButton />
-      <TutorialModal />
+      {/* <TutorialModal /> */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/game" element={<GamePage images={images} />} />

@@ -1,8 +1,8 @@
 import { httpClient } from './httpClient';
 
-export function startGame(token) {
-  return httpClient('/v1/startGame', {
+export function startGame(userId) {
+  return httpClient(`/api/startgame`, {
     method: 'POST',
-    token,
+    userId,
   });
 }

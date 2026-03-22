@@ -7,9 +7,10 @@ import { updateMoveSystem } from './systems/MoveSystem';
 import { activateShield, updateShieldState } from './systems/ShieldSystem';
 import { updateResolveMissSystem } from './systems/ResolveMissSystem';
 import { updateEndGameSystem } from './systems/EndGameSystem';
+import { getIsTutorialGlobal } from '../../../app/App';
 
 export class GameEngine {
-  constructor({ canvas, onStateChange, onGameOver, images }) {
+  constructor({ canvas, onStateChange, onGameOver, images}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.renderer = new CanvasRenderer(this.ctx);
@@ -21,6 +22,13 @@ export class GameEngine {
     this.spawnAccumulator = 0;
     this.lastHudSignature = '';
     this.images = images;
+    this.tutorialSpawned = {
+      'green' : getIsTutorialGlobal(),
+      'red' : getIsTutorialGlobal(),
+      'mixed' : getIsTutorialGlobal()
+    };
+    this.tutorialCompleted = getIsTutorialGlobal();
+    this.ticks = 0;
   }
 
   applyCanvasMetrics() {
@@ -31,14 +39,12 @@ export class GameEngine {
   }
 
   start() {
-    this.applyCanvasMetrics();
-    this.state.status = GAME_STATUS.RUNNING;
-    this.state.startedAt = performance.now();
-    this.lastFrameAt = performance.now();
-    this.emit(true);
-    console.log("Game start");
-    console.log("Images Start:", this.images);
-    this.loop();
+      this.applyCanvasMetrics();
+      this.state.status = GAME_STATUS.RUNNING;
+      this.state.startedAt = performance.now();
+      this.lastFrameAt = performance.now();
+      this.emit(true);
+      this.loop();
   }
 
   stop() {
@@ -53,15 +59,15 @@ export class GameEngine {
   }
 
   pressLane(laneIndex) {
-    if (this.state.status !== GAME_STATUS.RUNNING) return;
-    const now = performance.now();
-    activateShield(this.state, laneIndex, now);
-    this.state.pulseEffects.push({
-      lane: laneIndex,
-      startedAt: now,
-      durationMs: 280,
-    });
-    this.emit(true);
+      if (this.state.status !== GAME_STATUS.RUNNING) return;
+      const now = performance.now();
+      activateShield(this.state, laneIndex, now);
+      this.state.pulseEffects.push({
+        lane: laneIndex,
+        startedAt: now,
+        durationMs: 280,
+      });
+      this.emit(true);
   }
 
   computeBottomImageKey() {
@@ -111,13 +117,14 @@ export class GameEngine {
   }
 
   loop = () => {
+    this.ticks += 1;
     const now = performance.now();
     const deltaMs = Math.min(now - this.lastFrameAt, 40);
     this.lastFrameAt = now;
 
     if (this.state.status === GAME_STATUS.RUNNING) {
       this.state.elapsedMs = Math.min(now - this.state.startedAt, GAME_CONFIG.maxGameDurationMs);
-      updateSpawnSystem(this, deltaMs);
+      updateSpawnSystem(this, deltaMs, this.ticks);
       updateMoveSystem(this, deltaMs);
       updateShieldState(this.state, now);
       updateResolveMissSystem(this, now);
@@ -127,7 +134,7 @@ export class GameEngine {
       );
     }
 
-    this.renderer.render(this.state, now, this.images);
+    this.renderer.render(this.state, now, this.images, this.ticks, this.tutorialSpawned);
     this.emit();
 
     if (this.state.status === GAME_STATUS.GAME_OVER) {

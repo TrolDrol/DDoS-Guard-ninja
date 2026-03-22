@@ -41,8 +41,8 @@ export function drawEffects(ctx, state, now) {
     );
 
     if (imageLoaded && shieldImage.complete) {
-      const imgWidth = 60;
-      const imgHeight = 65;
+      const imgWidth = 45;
+      const imgHeight = 54;
       ctx.drawImage(
         shieldImage,
         x + laneWidth / 2 - imgWidth / 2,
